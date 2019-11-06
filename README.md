@@ -16,7 +16,7 @@ Solve Problems on LeetCode by Python.
 - Python dict 类型就是哈希表，key 不会相同
 - 通过以空间换取速度的方式，可以将查找时间从 O(n) 降低到 O(1)
 
-```
+```py
 def twoSum(self, nums, target):
     # O(1) 52 ms
     hashmap = {}  # python dict is hashmap
