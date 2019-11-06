@@ -8,10 +8,6 @@ Solve Problems on LeetCode by Python.
 
 ---
 ### [热水器楼层划分](https://www.jianshu.com/p/65d86c1f8231)
-满足 2 个约束条件：
-1. 每层楼的人打热水时，上下楼层最少
-2. 热水器放置总楼层数之和最小，即安放成本最小
-
 
 - 组合数 选出所有可能放置情况，再选择双成本最小的
 - 组合数 时间复杂度接近阶乘: https://www.zhihu.com/question/38474425/answer/76641611
@@ -20,6 +16,9 @@ Solve Problems on LeetCode by Python.
 ```py
 def best_heater_floors(floors, heaters):
     """
+    满足 2 个约束条件：
+        1. 每层楼的人打热水时，上下楼层最少
+        2. 热水器放置总楼层数之和最小，即安放成本最小
     在能满足 1 的情况下满足 2，先按 1 排序 再按 2
     :param floors: 楼层总数
     :param heaters: 热水器数量
