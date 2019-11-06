@@ -2,6 +2,36 @@
 
 Solve Problems on LeetCode by Python.
 
+--- 
+### 3. [无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/solution/wu-zhong-fu-zi-fu-de-zui-chang-zi-chuan-by-leetcod/)
+- 滑动窗口
+- 查找用的 sub_str 可用 hashset， python 查找效率: set > dict > list
+```py
+def lengthOfLongestSubstring0(s):
+    ll = 0  # 初始化 ll 可能长度，may have empty str
+    for i in range(len(s)):
+        sub_str = {s[i]}  # set
+        while i + 1 < len(s) and s[i + 1] not in sub_str:
+            sub_str.add(s[i + 1])
+            i += 1
+        # find a local max
+        ll = max(len(sub_str), ll)
+    return ll 
+```
+- 优化的滑动窗口
+- 字典后来值 更新前值的原理，能向前看找到一个最近的重复值所在位置的下一位，进行字串长度比较
+```py
+def lengthOfLongestSubstring(s):
+    st = {}
+    i, ans = 0, 0
+    for j in range(len(s)):
+        if s[j] in st:
+            i = max(i, st[s[j]])  # 更新后的起始位置 j+1
+        ans = max(ans, j - i + 1)
+        st[s[j]] = j + 1  # 字典后来值 更新前值的原理，能向前看找到一个最近的重复值所在位置的下一位
+    return ans 
+```
+
 ---
 ### 2. [两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 - 链表初始化、遍历
