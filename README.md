@@ -18,7 +18,7 @@ def lengthOfLongestSubstring0(s):
         ll = max(len(sub_str), ll)
     return ll 
 ```
-- 优化的滑动窗口
+- 优化的滑动窗口，用 dict 存储重复字母的最新位置
 - 字典后来值 更新前值的原理，能向前看找到一个最近的重复值所在位置的下一位，进行字串长度比较
 ```py
 def lengthOfLongestSubstring(s):
