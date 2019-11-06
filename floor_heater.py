@@ -65,9 +65,9 @@ def mid_val(a):
 def better_heater_floors(floors, heaters):
     """
     划分成 楼层子区间 考虑
+    todo: 不完备，某些情况出错
     :param floors:
     :param heaters:
-    :return:
     """
     heater_floors = []
 
@@ -108,10 +108,10 @@ def run(floors=5, heaters=2):
 
 
 if __name__ == '__main__':
-    # test_func(5, 2)
-    # test_func(8, 2)
-    # test_func(10, 3)
-    # test_func(19, 2)
-    # test_func(50, 3)
+    # run(5, 2)
+    # run(8, 2)
+    # run(10, 3)
+    # run(19, 2)
+    # run(50, 3)
     run(9, 4)  # 测试失败
     run(10, 4)

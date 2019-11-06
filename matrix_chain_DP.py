@@ -27,6 +27,8 @@ def matrix_chain_DP(matrixs):
                 if q < m[i][j] or m[i][j] == 0:  # 初始值 0，更新
                     m[i][j] = q
                     s[i][j] = k  # 设置 [i,j] 之间划分位置
+    # print(m)
+    # print(s)
     return m, s
 
 
