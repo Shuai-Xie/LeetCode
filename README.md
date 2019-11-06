@@ -5,7 +5,7 @@ Solve Problems on LeetCode by Python.
 ---
 ### 2. [两数相加](https://leetcode-cn.com/problems/add-two-numbers/)
 - 链表初始化、遍历
-- 哑结点来简化代码，哑结点就是没有赋有效值的头结点，可以用来保存 sum 链表的起始位置，方便 return
+- **哑结点是没有赋有效值的头结点**，可以用来保存 sum 链表的起始位置，方便 return
 - 使用进位 carry 简化问题
 - 活用 p, p.next，往往 while p: p = p.next
 
