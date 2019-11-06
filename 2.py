@@ -9,7 +9,7 @@ https://leetcode-cn.com/problems/add-two-numbers/solution/liang-shu-xiang-jia-by
 """
 
 
-# Definition for singly-linked list.
+# Definition for singly-linked list. 单向链表
 class ListNode:
     def __init__(self, x):
         self.val = x
@@ -17,6 +17,7 @@ class ListNode:
 
 
 def init_ListNode(list):
+    # 从 list 的 第1个元素开始 初始化链表
     node = ListNode(list[0])
     p = node
     for i in range(1, len(list)):
@@ -35,13 +36,14 @@ def traverse(listnode):
         p = p.next
 
 
-class SolutionNode:
+class Solution:
     def addTwoNumbers(self, l1, l2):  # l1, l2 is ListNode
+        # set dummy head for sum linked list
         dummy_head = ListNode(0)  # 哑结点简化代码
-        p, q, cur = l1, l2, dummy_head
-        carry = 0  # 进位
-        while p or q:  # or 可以计算完!
-            x = p.val if p else 0  # 完美解决其中1个list到头的问题
+        p, q, cur = l1, l2, dummy_head  # l1,l2 本身没有 dummy head
+        carry = 0  # 进位 简化加法的过程
+        while p or q:  # or 将2个链表都遍历完
+            x = p.val if p else 0  # 完美解决其中1个list到头的问题，相当于在 list 左边位置赋 0
             y = q.val if q else 0
             sum = x + y + carry
             carry = sum // 10  # 更新进位，其实对于加法 carry = 1
@@ -51,60 +53,15 @@ class SolutionNode:
                 p = p.next
             if q:
                 q = q.next
-        if carry > 0:
+        if carry > 0:  # 遍历完后，判断最左侧是否还要加1
             cur.next = ListNode(carry)
-        return dummy_head.next
-
-
-class SolutionList:
-    def addTwoNumbers(self, l1, l2):
-        """
-        仿照 ListNode 思想，使用 carry 存储进位，不会改变 l1, l2 的值
-        """
-        l3 = []
-        carry = 0
-        for i in range(max(len(l1), len(l2))):
-            x = l1[i] if i < len(l1) else 0
-            y = l2[i] if i < len(l2) else 0
-            sum = x + y + carry
-            carry = sum // 10
-            l3.append(sum % 10)
-        if carry > 0:
-            l3.append(carry)
-
-        return l3
-
-    def addTwoNumbers2(self, l1, l2):
-        """
-        先调整 l1,l2 为等长，再在 l2 进位，会改变 l2 的值
-        """
-        diff_len = len(l1) - len(l2)
-        if diff_len > 0:
-            l2.extend([0 for _ in range(diff_len)])
-        elif diff_len < 0:
-            l1.extend([0 for _ in range(-diff_len)])
-
-        l3 = []
-        for i in range(len(l1)):
-            tmp = l1[i] + l2[i]
-            if tmp < 10:
-                l3.append(tmp)
-            else:
-                l3.append(tmp - 10)
-                if i < len(l1) - 1:
-                    l2[i + 1] += 1  # 下一位数进1
-                else:  # 如果已到最后一位，仍要进1
-                    l3.append(1)
-
-        return l3
+        return dummy_head.next  # 从 sum 的最后1位开始
 
 
 l1 = [5, 2, 3, 4]
 l2 = [6, 7, 6, 6]
 l1_node = init_ListNode(l1)  # converse list to ListNode
 l2_node = init_ListNode(l2)
-print(SolutionList().addTwoNumbers(l1, l2))
-print(SolutionList().addTwoNumbers2(l1, l2))
 
-l3_node = SolutionNode().addTwoNumbers(l1_node, l2_node)
+l3_node = Solution().addTwoNumbers(l1_node, l2_node)
 traverse(l3_node)
