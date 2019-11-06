@@ -32,7 +32,7 @@ def matrix_chain_DP(matrixs):
             for k in range(i, j + 1):  # 定义 chain 内分割点 k，从 i 到 j，A 右侧 cols
                 # i-1: 对应 matrixs 第 i 个矩阵的 rows
                 # k,j: 对应 matrixs 第 k,j 个矩阵的 cols
-                # 如果要更明显的展示，可以将 matrixs 改写，不过有从 1 开始的结果意义更明显
+                # 如果要更明显的展示，可以将 matrixs 改写，不过从 1 开始的结果意义更明显
                 q = m[i][k] + m[k][j] + matrixs[i - 1] * matrixs[k] * matrixs[j]
                 if q < m[i][j] or m[i][j] == 0:  # 初始值 0，更新
                     m[i][j] = q
