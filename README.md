@@ -7,7 +7,7 @@ Solve Problems on LeetCode by Python.
 
 
 ---
-### [热水器楼层划分](https://www.jianshu.com/p/65d86c1f8231)
+### [floor_heater 热水器楼层划分](https://www.jianshu.com/p/65d86c1f8231)
 
 - 组合数 选出所有可能放置情况，再选择双成本最小的
 - 组合数 时间复杂度接近阶乘: https://www.zhihu.com/question/38474425/answer/76641611
