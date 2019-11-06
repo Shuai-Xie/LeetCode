@@ -7,6 +7,67 @@ Solve Problems on LeetCode by Python.
 
 
 ---
+### [matrix_chain_DP 矩阵链乘法 动态规划](https://blog.csdn.net/luoshixian099/article/details/46344175)
+- 括号加的位置，影响着 链乘矩阵 整体的乘法计算次数
+- 动态规划，大问题能建立在很多子问题上，而很多子问题是重复的，所以采用自底向上的方法，以空间换时间，将子问题的解存起来，比递归求解更快
+
+```py
+def matrix_chain_DP(matrixs):
+    """
+    :param matrixs: [rows-cols] of matrix chains
+    :return: m: cost matrix, s: cut matrix
+    """
+    mat_num = len(matrixs) - 1  # 矩阵个数
+
+    # 1 链 (A) i=j, m[i][i] = 0 没有乘法
+    m = np.zeros((mat_num + 1, mat_num + 1), dtype=int)  # l chain 最优计算代价 min
+    s = np.zeros((mat_num + 1, mat_num + 1), dtype=int)  # l chain 最优分割位置，索引要是 int
+
+    # [i,j] 链乘子问题, i <= j, 上三角矩阵
+    for l in range(2, mat_num + 1):  # 从 2 链 -> mat_num 链
+        # l chain [i,j]  l=j-i+1
+        for i in range(1, mat_num - l + 1 + 1):  # begin pos: 第1个矩阵 -> 第 mat_num - l + 1 个矩阵
+            j = i + l - 1  # end pos 闭区间
+            # sub chain of l chain
+            for k in range(i, j + 1):  # 定义 chain 内分割点 k，从 i 到 j，A 右侧 cols
+                # i-1: 对应 matrixs 第 i 个矩阵的 rows
+                # k,j: 对应 matrixs 第 k,j 个矩阵的 cols
+                # 如果要更明显的展示，可以将 matrixs 改写，不过有从 1 开始的结果意义更明显
+                q = m[i][k] + m[k][j] + matrixs[i - 1] * matrixs[k] * matrixs[j]
+                if q < m[i][j] or m[i][j] == 0:  # 初始值 0，更新
+                    m[i][j] = q
+                    s[i][j] = k  # 设置 [i,j] 之间划分位置
+    return m, s 
+```
+- 从结果来看，合适的括号，确实能减少整体乘法计算量
+
+```
+[30, 35, 15, 5, 10, 20, 25]
+(1, 1) cost: 0       A1
+(1, 2) cost: 15750   (A1A2)
+(1, 3) cost: 5250    (A1(A2A3))
+(1, 4) cost: 7500    ((A1(A2A3))A4)
+(1, 5) cost: 9750    ((A1(A2A3))(A4A5))
+(1, 6) cost: 10875   ((A1(A2A3))(A4(A5A6)))
+(2, 2) cost: 0       A2
+(2, 3) cost: 2625    (A2A3)
+(2, 4) cost: 5125    ((A2A3)A4)
+(2, 5) cost: 7625    ((A2A3)(A4A5))
+(2, 6) cost: 8875    ((A2A3)(A4(A5A6)))
+(3, 3) cost: 0       A3
+(3, 4) cost: 750     (A3A4)
+(3, 5) cost: 1500    (A3(A4A5))
+(3, 6) cost: 1875    (A3(A4(A5A6)))
+(4, 4) cost: 0       A4
+(4, 5) cost: 1000    (A4A5)
+(4, 6) cost: 1250    (A4(A5A6))
+(5, 5) cost: 0       A5
+(5, 6) cost: 5000    (A5A6)
+(6, 6) cost: 0       A6
+```
+
+---
+
 ### [floor_heater 热水器楼层划分](https://www.jianshu.com/p/65d86c1f8231)
 
 - 组合数 选出所有可能放置情况，再选择双成本最小的
