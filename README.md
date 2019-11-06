@@ -42,6 +42,9 @@ def twoSum(self, nums, target):
     head = 0
     tail = len(nums) - 1
     sum_result = nums[sorted_idx[head]] + nums[sorted_idx[tail]]
+
+    # 题目假定了一定有一组解，所以这样肯定可以查找到
+    # 注意：并不能设置提前终止条件！因为 left + right 之和并不一定是单调的
     while sum_result != target:
         if sum_result > target:  # 慢慢变小
             tail -= 1
