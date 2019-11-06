@@ -92,24 +92,26 @@ def better_heater_floors(floors, heaters):
 import time
 
 
-def test_func(floors=5, heaters=2):
+def run(floors=5, heaters=2):
     print('floors, heaters:', floors, heaters)
-    st = time.process_time_ns()
+    st = time.process_time()
     heater_floors = best_heater_floors(floors, heaters)
     print('result:', heater_floors)
-    print('time:', time.process_time_ns() - st)
+    print('time:', time.process_time() - st)
     # print_each_P_floors(floors, heater_floors)
 
-    st = time.process_time_ns()
+    st = time.process_time()
     heater_floors = better_heater_floors(floors, heaters)
     print('result:', heater_floors)
-    print('time:', time.process_time_ns() - st)
+    print('time:', time.process_time() - st)
     # print_each_P_floors(floors, heater_floors)
 
 
 if __name__ == '__main__':
-    test_func(5, 2)
-    test_func(8, 2)
-    test_func(10, 3)
-    test_func(19, 2)
-    test_func(50, 3)
+    # test_func(5, 2)
+    # test_func(8, 2)
+    # test_func(10, 3)
+    # test_func(19, 2)
+    # test_func(50, 3)
+    run(9, 4)  # 测试失败
+    run(10, 4)
