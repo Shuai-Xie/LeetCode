@@ -1,6 +1,6 @@
 # LeetCode
 
-Solve Problems on LeetCode by Python.
+Solve Problems on LeetCode with Python.
 
 --- 
 ### 3. [无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/solution/wu-zhong-fu-zi-fu-de-zui-chang-zi-chuan-by-leetcod/)
