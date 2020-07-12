@@ -1,5 +1,12 @@
 .DS_Store
 
-.idea/*.xml
-.idea/*.iml
-.idea/*/*.xml
+.idea
+torch
+utils
+others
+
+
+*/__pycache__
+*.csv
+
+z.py
