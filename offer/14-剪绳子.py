@@ -28,6 +28,13 @@ class Solution:
             print(max_product, max_arr)
             return max_product
 
+        # (x^a)%p 循环求余
+        def remainder(x, a, p):
+            rem = 1  # x^0
+            for _ in range(a):
+                rem = (rem * x) % p  # 递推公式
+            return rem
+
         def math_force(n):
             """
             求 (x)^(n/x) 取极大值时，x 的取值
@@ -42,13 +49,35 @@ class Solution:
                 else:  # 过半，新数，总共 a+1 个数
                     return int(math.pow(3, a) * b)
 
-        res = brute_force(n)
-        res = math_force(n)
+        def math_force_mode(n, p=1e9 + 7):
+            """
+            求 (x)^(n/x) 取极大值时，x 的取值；结果取模
+            """
+            import math
+            if n <= 3:  # 2,3 -> 1*1, 2*1
+                return (n - 1) % p
+            else:  # 每段长为 3 最优
+                a, b = n // 3, n % 3
+                if b < 3 / 2:  # 小于一半，加到最后1个数，总共 a 个数 [实际上 使用 3+b 得到的 arr 是不对的，[4] vs. [2,2]]
+                    rem = remainder(3, a - 1, p)
+                    rem = (rem * ((3 + b) % p)) % p  # (a*b) %p = (a%p * b%p) %p
+                    return rem
+                else:  # 过半，新数，总共 a+1 个数
+                    rem = remainder(3, a, p)
+                    rem = (rem * (b % p)) % p
+                    return rem
 
+        # res = brute_force(n)
+        # res = math_force(n)
+        res = int(math_force_mode(n))
         return res
 
 
 def demo_func():
+    """
+    段长相同情况下，vis 不同 n 取极大值的位置
+    乘积: x ** (n / x)
+    """
     import numpy as np
     import matplotlib.pyplot as plt
 
@@ -63,6 +92,7 @@ def demo_func():
     plt.show()
 
 
-demo_func()
-# s = Solution()
-# s.cuttingRope(4)
+if __name__ == '__main__':
+    # demo_func()
+    s = Solution()
+    s.cuttingRope(110)
