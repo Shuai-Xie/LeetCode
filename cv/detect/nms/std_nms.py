@@ -1,30 +1,21 @@
+"""
+主要针对文本检测中 不同的 box
+https://zhuanlan.zhihu.com/p/50126479
+- 水平文本：标准 nms
+- 有向的 box 文本：inclined nms, 对应 rotate box
+- 基于分割的多方向文本：mask nms, polygon nms, inclined nms
+- 基于检测的多方向文本：polygon nms, inclined nms
+
+python, pytorch, c++ 实现
+https://zhuanlan.zhihu.com/p/78504109
+"""
 import numpy as np
-import matplotlib.pyplot as plt
+from cv.detect.utils import plt_dets
 
 
-def plt_dets(dets):
-    side = int(np.max(dets[:, 0:4])) + 10
-    canvas = np.ones((side, side, 3))  # float 类型
-
-    plt.figure()
-    plt.imshow(canvas)
-    for box in dets:
-        plt.gca().add_patch(
-            plt.Rectangle(
-                xy=box[:2], width=box[2] - box[0], height=box[3] - box[1],  # box
-                # color='yellow',
-                fill=False,  # 不填充矩形，必须设置
-                edgecolor='green',
-                linewidth=2,
-            )
-        )
-        plt.annotate(s=str(box[-1]),
-                     xy=box[:2], xycoords='data', xytext=(0, +5), textcoords='offset points',
-                     color='k', fontsize=10)
-    plt.show()
-
-
-def nms_thre(dets, thre):  # iou thre
+# 标准 nms，适合 水平 bbox
+# note: 针对的是单类的，对于多类别，需要在外侧添加一层 类别 for 循环
+def standard_nms(dets, thre):  # iou thre
     x1 = dets[:, 0]
     y1 = dets[:, 1]
     x2 = dets[:, 2]
@@ -73,7 +64,7 @@ if __name__ == '__main__':
     ])
     plt_dets(dets)
 
-    keep = nms_thre(dets, 0.5)
+    keep = standard_nms(dets, 0.5)
 
     dets = dets[keep]
     plt_dets(dets)
