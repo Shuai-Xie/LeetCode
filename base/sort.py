@@ -48,7 +48,8 @@ def select_sort(a):
 
 
 # 堆排序
-# 利用完全二叉树，父子节点 idx 位置关系，构建大根堆，并不断将最大值替换到数组末尾
+# 利用完全二叉树，父子节点 idx 位置关系，构建大根堆
+# 并不断将最大值替换到数组末尾
 def heap_sort(a):
     LEN = len(a)
     if LEN == 1:
@@ -56,7 +57,7 @@ def heap_sort(a):
     else:
         # 自下而上 建立大根堆；从最后1个父亲 idx = (LEN-1 -1)//2 开始直到 root
         for i in range((LEN - 2) // 2, -1, -1):  # 反过来就是堆中idx最大的左孩子位置
-            child = 2 * i + 1  # 左孩子
+            child = 2 * i + 1  # 左孩子; idx 不是从1开始的
             if child + 1 < LEN:  # 判断是否有 右孩子
                 child = child + 1 if a[child + 1] > a[child] else child  # 指向最大孩子
             if a[child] > a[i]:  # 交换 父子
