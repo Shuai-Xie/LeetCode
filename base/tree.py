@@ -58,42 +58,56 @@ def postOrderTraverse(node):
 
 
 # 非递归
-def preOrder(node):
+# 用栈模拟 递归的过程
+# 根-左-右
+def preOrderStack(node):
+    if not node:
+        return None
+
     stack = [node]  # 节点入栈
-    while len(stack) > 0:
-        node = stack.pop()  # 栈尾元素
+    while stack:
+        node = stack.pop()  # 栈尾元素, -1
         if node:
             print(node.val, end=' ')
             stack.append(node.right)  # 先添加右孩子
             stack.append(node.left)  # 让左孩子先出栈
+            # 先出栈的放在栈顶
 
 
-def inOrder(node):
-    stack = []  # 节点入栈
-    pos = node
-    while pos or len(stack) > 0:
-        if pos:  # pos!=None 时，一路添加左孩子
-            stack.append(pos)
-            pos = pos.left
-        else:  # 左孩子到头了
-            pos = stack.pop()  # 中
-            print(pos.val, end=' ')  # 打印 inOrder 节点
-            pos = pos.right  # 遍历右孩子，入栈
+def inOrderStack(node):
+    if not node:
+        return None
+
+    stack = []
+    while node or stack:  # node 对应 if, stack 对应 else
+        if node:  # 首节点, 方便根据 node 压入节点
+            stack.append(node)
+            node = node.left  # 将左节点不断压栈
+        else:  # 当左节点为空时，出栈当前节点，并进入右节点
+            node = stack.pop()
+            print(node.val, end=' ')
+            node = node.right
 
 
-def postOrder(node):
+def postOrderStack(node):
+    if not node:
+        return None
+
     stack = [node]
     stack2 = []
-    while len(stack) > 0:
-        node = stack.pop()
-        stack2.append(node)  # 存储 stack 的依次出栈
-        if node.left:
-            stack.append(node.left)
-        if node.right:
-            stack.append(node.right)
 
-    while len(stack2) > 0:
-        print(stack2.pop().val, end=' ')
+    while stack:
+        node = stack.pop()
+        if node:
+            stack2.append(node.val)  # 存储 stack 的依次出栈
+            stack.append(node.left)  # stack 先压 left 再 right，出栈时对于 stack2，先压 right 再 left；那么 stack2 出栈 就是 left-right-root
+            stack.append(node.right)
+            # 与 preOrderStack 对比
+            # 在 pre 中，node.val 直接 print
+            # 而 post 使用 stack2 将 root 压入栈底
+
+    while stack2:  # 出栈顺序
+        print(stack2.pop(), end=' ')
 
 
 # 层序遍历
@@ -103,21 +117,28 @@ def layerTraverse(node):
 
     queue = [node]
 
-    while len(queue) > 0:
+    while queue:
         node = queue.pop(0)  # 出来 queue 首元素
-        print(node.val, end=' ')
-        # 从左到右，每次可以添加1个节点1层的2个孩子，
-        # 而 pop(0) 输出的恰为同层的下一个节点，所以左右孩子也按顺序添加，至此全部添加过程都按顺序
-        if node.left:
+        if node:
+            print(node.val, end=' ')
             queue.append(node.left)
-        if node.right:
             queue.append(node.right)
 
 
 if __name__ == '__main__':
-    layerTraverse(a)
+    # layerTraverse(a)
+
     # preOrderTraverse(a)
     # print()
+    # preOrderStack(a)
+    # print()
+
     # inOrderTraverse(a)
     # print()
-    # postOrderTraverse(a)
+    # inOrderStack(a)
+    # print()
+
+    postOrderTraverse(a)
+    print()
+    postOrderStack(a)
+    print()
