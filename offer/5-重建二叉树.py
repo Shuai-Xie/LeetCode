@@ -15,69 +15,88 @@ class TreeNode:
 
 
 """
-inorder root_idx 左侧为 左子树，长度 = root_idx
-preorder [0] 为 root node，之后长度为 root_idx 为 左子树
+先序 + 中序 重建二叉树
+后序 + 中序
+inorder root_idx 左侧为 左子树，【长度 = root_idx】关键
+preorder[0]   为 root node，之后长度为 root_idx 为 左子树；再往后到末尾为右子树
+postorder[-1] 为 root node，从 0 开始长度为 root_idx 为 左子树；其后到 -1 为右子树
 """
 
 
-class Solution1:
-    def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
-
-        def build_tree(preorder, inorder):
-            assert len(preorder) == len(inorder)
-
-            if len(preorder) > 0:
-                root, root_idx = preorder[0], 0  # 最上部根节点
-                rootNode = TreeNode(root)
-
-                for idx, val in enumerate(inorder):
-                    if val == root:
-                        root_idx = idx
-                        break
-
-                # 构建左子树
-                rootNode.left = build_tree(preorder[1:root_idx + 1], inorder[:root_idx])  # 长度恰为 idx
-                # 构建右子树，从 preorder, inorder 截取其 先序，中序
-                rootNode.right = build_tree(preorder[root_idx + 1:], inorder[root_idx + 1:])  # 长度恰为 idx
-
-                return rootNode
-            else:
-                return None
-
-        return build_tree(preorder, inorder)
-
-
 class Solution:
+    # 先序 + 中序
     def buildTree(self, preorder: List[int], inorder: List[int]) -> TreeNode:
+        if preorder and inorder and len(preorder) == len(inorder):
+            root_val, root_idx = preorder[0], 0
+            root = TreeNode(root_val)
+            # 在 inorder 中寻找 root 位置；切分
+            for idx, val in enumerate(inorder):
+                if val == root_val:
+                    root_idx = idx
+                    break
+            # 找到中序中 root_idx；切分左右子树
+            root.left = self.buildTree(preorder[1:root_idx + 1], inorder[:root_idx])
+            root.right = self.buildTree(preorder[root_idx + 1:], inorder[root_idx + 1:])
 
-        # 递归建树
-        def build_tree(preorder, inorder):
-            if len(preorder) > 0:
-                root_val, root_idx = preorder[0], 0  # 根节点
-                root = TreeNode(root_val)
-                # 找到中序中 root 位置
-                for idx, val in enumerate(inorder):
-                    if root_val == val:
-                        root_idx = idx
-                        break
-                # 使用 root_idx 分割 左右子树，从 preorder 和 inorder 截取子树节点
-                root.left = build_tree(preorder[1:root_idx + 1], inorder[:root_idx])
-                root.right = build_tree(preorder[root_idx + 1:], inorder[root_idx + 1:])
-                return root
-            else:
-                return None
+            return root  # 递归返回最上层的 root
 
-        return build_tree(preorder, inorder)
+    # 后序 + 中序
+    def buildTree_post(self, postorder: List[int], inorder: List[int]) -> TreeNode:
+        if postorder and inorder and len(postorder) == len(inorder):
+            root_val, root_idx = postorder[-1], len(postorder) - 1
+            root = TreeNode(root_val)
+
+            # 寻找 inorder 中 root 位置
+            for idx, val in enumerate(inorder):
+                if val == root_val:
+                    root_idx = idx
+                    break
+
+            # 构建左右子树; 中序遍历中 root_idx 位置 == 左子树的长度
+            root.left = self.buildTree_post(postorder[:root_idx], inorder[:root_idx])
+            root.right = self.buildTree_post(postorder[root_idx:-1], inorder[root_idx + 1:])
+
+            return root
 
 
-preorder = [3, 9, 20, 15, 7]  # 前序遍历
-inorder = [9, 3, 15, 20, 7]  # 中序遍历
+from base.tree import preOrderTraverse, inOrderTraverse, postOrderTraverse, build_tree_from_arr
 
-s = Solution1()
-tree = s.buildTree(preorder, inorder)
 
-from base.tree import preOrderTraverse, inOrderTraverse
+def rebuild_tree():
+    preorder = [3, 9, 20, 15, 7]  # 前序遍历
+    inorder = [9, 3, 15, 20, 7]  # 中序遍历
+    postorder = [9, 15, 7, 20, 3]  # 后序遍历
 
-preOrderTraverse(tree)
-print()
-inOrderTraverse(tree)
+    s = Solution()
+
+    # 先序 创建
+    tree = s.buildTree(preorder, inorder)
+
+    preOrderTraverse(tree)
+    print()
+    inOrderTraverse(tree)
+    print()
+    postOrderTraverse(tree)
+    print()
+
+    # 后序 创建
+    tree = s.buildTree_post(postorder, inorder)
+
+    preOrderTraverse(tree)
+    print()
+    inOrderTraverse(tree)
+    print()
+    postOrderTraverse(tree)
+    print()
+
+
+if __name__ == '__main__':
+    # 有 先序/后序 + 中序 重新创建树
+    # rebuild_tree()
+    tree = build_tree_from_arr(arr=[3, 9, 20, None, None, 15, 7])
+    preOrderTraverse(tree)
+    print()
+    inOrderTraverse(tree)
+    print()
+    postOrderTraverse(tree)
+    print()

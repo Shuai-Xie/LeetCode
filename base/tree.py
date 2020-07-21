@@ -5,22 +5,6 @@ class TreeNode:
         self.right = None
 
 
-# 构建简单树
-a = TreeNode(1)
-b = TreeNode(2)
-c = TreeNode(3)
-d = TreeNode(4)
-e = TreeNode(5)
-f = TreeNode(6)
-g = TreeNode(7)
-
-a.left = b
-a.right = c
-b.left = d
-b.right = e
-c.left = f
-c.right = g
-
 """
 二叉树的 三序遍历 真是递归完美的展现
 无论哪种遍历 都要先定义好递归出口
@@ -125,8 +109,31 @@ def layerTraverse(node):
             queue.append(node.right)
 
 
+def build_tree_from_arr(arr):
+    """
+    根据满二叉树 父子节点 与 arr idx 之间关系
+    """
+    if not arr:
+        return None
+
+    # 节点从 1 开始
+    nodes = [None] + [TreeNode(v) if v else None for v in arr]
+
+    num = len(nodes)
+    for i in range(1, num):
+        if 2 * i < num:
+            nodes[i].left = nodes[2 * i]
+        if 2 * i + 1 < num:
+            nodes[i].right = nodes[2 * i + 1]
+
+    return nodes[1]  # 首节点
+
+
 if __name__ == '__main__':
-    # layerTraverse(a)
+    a = build_tree_from_arr([1, 2, 3, 4, 5, 6, 7])
+
+    layerTraverse(a)
+    print()
 
     # preOrderTraverse(a)
     # print()
