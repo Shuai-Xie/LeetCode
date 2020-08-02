@@ -111,7 +111,7 @@ def layerTraverse(node):
 
 def build_tree_from_arr(arr):
     """
-    根据满二叉树 父子节点 与 arr idx 之间关系
+    根据完全二叉树 父子节点 与 arr idx 之间关系
     """
     if not arr:
         return None
@@ -121,19 +121,58 @@ def build_tree_from_arr(arr):
 
     num = len(nodes)
     for i in range(1, num):
-        if 2 * i < num:
-            nodes[i].left = nodes[2 * i]
-        if 2 * i + 1 < num:
-            nodes[i].right = nodes[2 * i + 1]
+        if nodes[i]:  # 判断 node 是否为 None
+            if 2 * i < num:
+                nodes[i].left = nodes[2 * i]
+            if 2 * i + 1 < num:
+                nodes[i].right = nodes[2 * i + 1]
 
     return nodes[1]  # 首节点
 
 
-if __name__ == '__main__':
-    a = build_tree_from_arr([1, 2, 3, 4, 5, 6, 7])
+from typing import List
 
-    layerTraverse(a)
-    print()
+
+def binaryTreePaths_str(root: TreeNode) -> List[str]:
+    # 获取二叉树的所有路径 存入 str
+    if not root:
+        return []
+    if not root.left and not root.right:
+        return [str(root.val)]
+
+    paths = []
+    for p in binaryTreePaths_str(root.left):  # 头节点 + 子树路径
+        paths.append(f'{root.val}->{p}')
+    for p in binaryTreePaths_str(root.right):
+        paths.append(f'{root.val}->{p}')
+
+    return paths
+
+
+def binaryTreePaths(root: TreeNode) -> List[List[int]]:
+    # 获取二叉树的所有路径 存入 list
+    if not root:
+        return []
+    if not root.left and not root.right:
+        return [root.val]
+
+    paths = []
+    for p in binaryTreePaths(root.left):
+        paths.append([root.val] + ([p] if not isinstance(p, list) else p))  # 注意后一项要有括号
+    for p in binaryTreePaths(root.right):
+        paths.append([root.val] + ([p] if not isinstance(p, list) else p))
+
+    return paths
+
+
+if __name__ == '__main__':
+    # a = build_tree_from_arr([1, 2, 3, 4, 5, 6, 7])
+    a = build_tree_from_arr([1, 2, 3, 4])
+    print(binaryTreePaths(a))
+    print(binaryTreePaths_str(a))
+
+    # layerTraverse(a)
+    # print()
 
     # preOrderTraverse(a)
     # print()
@@ -145,7 +184,7 @@ if __name__ == '__main__':
     # inOrderStack(a)
     # print()
 
-    postOrderTraverse(a)
-    print()
-    postOrderStack(a)
-    print()
+    # postOrderTraverse(a)
+    # print()
+    # postOrderStack(a)
+    # print()
