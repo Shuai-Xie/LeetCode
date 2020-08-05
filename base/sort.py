@@ -87,22 +87,21 @@ def bubble_sort(a):
 def quick_sort(a):
     if len(a) <= 1:  # 也要处理空 list，比如下面 low=0
         return a
-    else:
-        low, high = 0, len(a) - 1
-        pivot = a[low]  # 基准值
-        while low < high:
-            # 两边往中间查找
-            while low < high and a[high] >= pivot:  # 不用担心条件1先不满足，因为 low=high，赋值无影响
-                high -= 1
-            a[low], a[high] = a[high], a[low]  # 把 < pivot 的值 a[high] 放左边，此时 a[low] = pivot
-            while low < high and a[low] <= pivot:
-                low += 1
-            a[low], a[high] = a[high], a[low]  # 把 > pivot 的值 a[low] 放右边，此时 a[high] = pivot
-        # low 为 pivot 实际位置
-        # 再分别排序左右
-        a[:low] = quick_sort(a[:low])
-        a[low + 1:] = quick_sort(a[low + 1:])
-        return a
+    low, high = 0, len(a) - 1
+    pivot = a[low]  # 基准值
+    while low < high:
+        # 两边往中间查找
+        while low < high and a[high] >= pivot:  # 不用担心条件1先不满足，因为 low=high，赋值无影响
+            high -= 1
+        a[low], a[high] = a[high], a[low]  # 把 < pivot 的值 a[high] 放左边，此时 a[low] = pivot
+        while low < high and a[low] <= pivot:
+            low += 1
+        a[low], a[high] = a[high], a[low]  # 把 > pivot 的值 a[low] 放右边，此时 a[high] = pivot
+    # low 为 pivot 实际位置
+    # 再分别排序左右
+    a[:low] = quick_sort(a[:low])
+    a[low + 1:] = quick_sort(a[low + 1:])
+    return a
 
 
 # 归并排序

@@ -30,31 +30,34 @@ def lengthOfLongestSubstring1(s):
 
 
 # 滑动窗口
-# 查找用的 sub_str 可用 hashset， python 查找效率: set > dict > list
-def lengthOfLongestSubstring0(s):
-    ll = 0  # 初始化 ll 可能长度，may have empty str
+# 查找用的 sub_str 可用 hashset
+# note: python 查找效率: set > dict > list
+def lengthOfLongestSubstring(s):
+    res = 0  # 初始化 ll 可能长度，may have empty str
     for i in range(len(s)):
         sub_str = {s[i]}  # set
+        # 友谊，直到遇到重复 c，跳出
         while i + 1 < len(s) and s[i + 1] not in sub_str:
             sub_str.add(s[i + 1])
             i += 1
         # find a local max
-        ll = max(len(sub_str), ll)
-    return ll
+        res = max(len(sub_str), res)
+    return res
 
 
 # 优化的滑动窗口
-def lengthOfLongestSubstring(s):
+def lengthOfLongestSubstring1(s):
     st = {}
-    i, ans = 0, 0
+    i, res = 0, 0
     for j in range(len(s)):
         if s[j] in st:
-            i = max(i, st[s[j]])  # 更新后的起始位置 j+1
-        ans = max(ans, j - i + 1)
-        st[s[j]] = j + 1  # 字典后来值 更新前值的原理，能向前看找到一个最近的重复值所在位置的下一位
-    return ans
+            i = max(i, st[s[j]] + 1)  # 更新后的起始位置，必有 max，保证窗口内部 unique
+        res = max(res, j - i + 1)
+        st[s[j]] = j
+    return res
 
 
+print(lengthOfLongestSubstring("abba"))
 print(lengthOfLongestSubstring('abcabcbb'))
 print(lengthOfLongestSubstring('bbbbb'))
 print(lengthOfLongestSubstring('pwwkew'))
