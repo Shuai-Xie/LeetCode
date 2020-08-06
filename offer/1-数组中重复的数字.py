@@ -24,6 +24,7 @@ def findRepeatNumber(nums):
 # 排序，看相邻二值
 # 时间 O(nlogn), 空间 O(1)
 def findRepeatNumber2(nums):
+    # 排序后，只比较相相邻的两个数字即可
     nums = sorted(nums)
     for v1, v2 in zip(nums[:-1], nums[1:]):
         if v1 == v2:
