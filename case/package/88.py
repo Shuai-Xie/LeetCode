@@ -1,19 +1,5 @@
-def show(a):
-    a += 10
-    print(a)
-
-
-a = 100
-show(a)
+a = [[0] * 3] * 2
 print(a)
 
-
-def show2(a):
-    a = a[:]
-    a.append(10)
-    print(a)
-
-
-a = [1, 2, 3]
-show2(a)
+a = [[0] * 3 for _ in range(2)]
 print(a)
