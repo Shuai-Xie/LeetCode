@@ -20,7 +20,7 @@ vs = [0] + [1, 2, 3, 4]
 ws = [0] + [2, 4, 4, 6]
 
 
-# Accepted
+# 可以保存 g 的所有方案，但内存会爆
 def f1():
     f = [0] * (V + 1)  # 价值
     g = [[] for _ in range(V + 1)]  # 每个价值下的所有方案，因为后序状态可能是从 之前前.. 的方案转移过来
@@ -72,9 +72,6 @@ def f2():
 
     print(*g[-1])
 
-
-# 字典排序
-from functools import cmp_to_key
 
 f1()
 f2()
