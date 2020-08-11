@@ -23,6 +23,7 @@ def longest_palindrome(s):
         return ''
     start, end = 0, 0  # idx 位置
     for i in range(len(s)):
+        # 回文串 长度 奇数/偶数 两种情况
         odd_len = expand_around_center(i, i)  # 奇数长度，左右起始 idx 相同; 执行 n 次
         even_len = expand_around_center(i, i + 1)  # 偶数长度，左右起始 idx 相差1; 执行 n-1 次
         max_len = max(odd_len, even_len)
