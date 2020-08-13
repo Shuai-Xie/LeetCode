@@ -17,7 +17,7 @@ class Solution:
         def dfs(i, s1, s2):  # 第i个元素
             nonlocal ans  # note: 函数内部 修改 外部变量
             if i == n:  # 终了
-                return 0
+                return
             for s in range(3):  # 递归树 每个节点有3种选择状态
                 # 选一状态
                 use[i] = s
