@@ -14,7 +14,7 @@ from cv.detect.utils import plt_dets
 
 
 # 标准 nms，适合 水平 bbox
-# note: 针对的是单类的，对于多类别，需要在外侧添加一层 类别 for 循环
+# note: 针对的是单类的，对于多类别 multi-label nms，需要在外侧添加一层 类别 for 循环
 def standard_nms(dets, thre):  # iou thre
     x1 = dets[:, 0]
     y1 = dets[:, 1]

@@ -85,6 +85,7 @@ def bubble_sort(a):
 # 自上而下 根据 pivot 分割 sub_list
 # 所以 quick_sort 分割左右在后，而 merge_sort 在前
 def quick_sort(a):
+    a = a[:]  # 不改变原序列
     if len(a) <= 1:  # 也要处理空 list，比如下面 low=0
         return a
     low, high = 0, len(a) - 1
@@ -99,7 +100,7 @@ def quick_sort(a):
         a[low], a[high] = a[high], a[low]  # 把 > pivot 的值 a[low] 放右边，此时 a[high] = pivot
     # low 为 pivot 实际位置
     # 再分别排序左右
-    a[:low] = quick_sort(a[:low])
+    a[:low] = quick_sort(a[:low])  # 截取相当于 重新初始化了?
     a[low + 1:] = quick_sort(a[low + 1:])
     return a
 
@@ -107,7 +108,7 @@ def quick_sort(a):
 # 归并排序
 # 自下而上 归并 sub_list 为有序
 def merge_sort(a):
-    if len(a) <= 1:
+    if len(a) < 2:
         return a
     else:
         mid = len(a) // 2  # 平分两段，要避免最下端 array 只有 2个元素时，始终分不开为2个长度为1的list的问题
@@ -123,12 +124,34 @@ def merge_sort(a):
             else:
                 b.append(a[j])
                 j += 1
-        b.extend(a[i:mid])  # 其中一个 list 必为 空
-        b.extend(a[j:])
+        b = b + a[i:mid] + a[j:]
         return b
+
+
+def merge_sort2(arr):
+    n = len(arr)
+    if n < 2:
+        return arr
+    else:
+        mid = n // 2  # 均分两段
+        a = merge_sort2(arr[:mid])  # 不断分解到最短 len(a) = 0 or 1
+        b = merge_sort2(arr[mid:])
+        # 此时 a,b 两段已有序
+        c = []
+        while a and b:
+            if a[0] < b[0]:
+                c.append(a.pop(0))
+            else:
+                c.append(b.pop(0))
+        c = c + a + b  # 其中1个必为空 []
+        return c
 
 
 if __name__ == '__main__':
     a = list(np.random.permutation(12))
+    print(a)
+    print(quick_sort(a))
+    print(a)
+    print(merge_sort2(a))
     print(a)
     print(merge_sort(a))

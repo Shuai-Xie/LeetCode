@@ -40,6 +40,7 @@ def twoSum1(nums, target):
     head = 0
     tail = len(nums) - 1
     sum_result = nums[sorted_idx[head]] + nums[sorted_idx[tail]]
+    # 一增一减 保证顺序
     while sum_result != target:
         if sum_result > target:
             tail -= 1

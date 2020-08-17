@@ -4,8 +4,6 @@
 from typing import List
 
 
-
-
 class Solution:
     # dfs 回溯: 回到之前状态的意思
     def permute(self, nums: List[int]) -> List[List[int]]:

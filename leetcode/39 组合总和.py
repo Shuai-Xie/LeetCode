@@ -24,6 +24,28 @@ class Solution:
 
         return f[-1]
 
+    def combinationSum_recur(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()
+        n = len(candidates)
+
+        path = []
+        res = []
+
+        def dfs(ta, begin):
+            if ta == 0:
+                res.append(path[:])
+                return
+            if ta < 0:
+                return
+
+            for i in range(begin, n):
+                path.append(candidates[i])
+                dfs(ta - candidates[i], i)  # 每个元素可用无限次，所以不是 i+1，到了树的下一层，仍可以从i选择
+                path.pop()
+
+        dfs(target, 0)
+        return res
+
 
 s = Solution()
 # candidates = [2, 3, 6, 7]
@@ -31,3 +53,4 @@ s = Solution()
 candidates = [2, 3, 5]
 target = 8
 print(s.combinationSum(candidates, target))
+print(s.combinationSum_recur(candidates, target))

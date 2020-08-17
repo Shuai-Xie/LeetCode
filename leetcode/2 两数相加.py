@@ -41,7 +41,10 @@ def addTwoNumbers(l1, l2):  # l1, l2 is ListNode
     dummy_head = ListNode(0)  # 哑结点简化代码
     p, q, cur = l1, l2, dummy_head  # l1,l2 本身没有 dummy head
     carry = 0  # 进位 简化加法的过程
-    while p or q:  # or 将2个链表都遍历完
+
+    # or 将2个链表都遍历完
+    # 内部 如果 list 到头，左边补 0
+    while p or q:
         x = p.val if p else 0  # 完美解决其中1个list到头的问题，相当于在 list 左边位置赋 0
         y = q.val if q else 0
         sum = x + y + carry

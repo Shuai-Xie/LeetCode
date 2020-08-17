@@ -22,6 +22,8 @@ def dfs(i, j, cnt):  # 种地数量?
             continue
 
         farm[i][j] = c  # 这个位置 种 c 作物
+        # 指定二维情况下 dfs 搜索方向
+        # i,j 移动会尝试不同的 c，最终达到 cnt 数量
         if j == n - 1:  # 列到头，去往下一行
             dfs(i + 1, 0, cnt + 1)
         else:  # 按列搜
