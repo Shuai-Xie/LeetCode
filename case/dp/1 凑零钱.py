@@ -11,8 +11,9 @@ class Solution:
     def coin_change(self, coins, amount):
         dp = [0] + [amount + 1] * amount
         coins = [0] + coins
-        # 比个数
+        # 遍历硬币面值
         for i in range(1, len(coins)):
+            # 总面值
             for j in range(coins[i], amount + 1):
                 dp[j] = min(dp[j], dp[j - coins[i]] + 1)  # 内循环 j 变化时，外循环 i 没变，暗含了 coins[i] 可以选多次
         return dp[-1]
