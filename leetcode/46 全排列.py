@@ -12,6 +12,8 @@ class Solution:
         path = []
         used = [False] * n
 
+        # 内部修改外部变量值，没有 return 结果
+        # dfs 传入的状态值 为当前的深度
         def dfs(depth):
             if depth == len(nums):  # 已经到最后一层
                 res.append(path[:])  # copy path 对象

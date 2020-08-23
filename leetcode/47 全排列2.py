@@ -32,7 +32,6 @@ class Solution:
                 if used[i]:  # 出现在 i 之前的元素
                     continue
 
-                # 定义剪枝条件? 将 res 中已经出现的 前半段路径 相同的去掉?
                 # not used[i - 1] 回溯回来 刚刚撤掉选择, 表明同值的必须是 同层的兄弟结点
                 if i > 0 and nums[i] == nums[i - 1] and not used[i - 1]:
                     continue

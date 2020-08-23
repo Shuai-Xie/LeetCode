@@ -7,33 +7,37 @@
 # 所以，每当找到公共子串候选项时，都要先判断 S_idx 和 S'_idx_inverse 是否相同
 # 判断定位到 同一子串后，再判断是否回文
 
+class Solution:
+    def longestPalindrome(self, s: str) -> str:
+        n = len(s)
+        if n <= 1:
+            return s
 
-def longest_palindrome(s):
-    # 中心两边扩展法
-    def expand_around_center(left, right):
-        # 以 left,right 为中心 idx 向两边扩展
-        L, R = left, right
-        # 合理范围内 向两边扩展 L,R
-        while L >= 0 and R < len(s) and s[L] == s[R]:
-            L -= 1
-            R += 1
-        return R - L - 1  # 跳出循环时，L,R 是不等的两个下表: (R-1) - (L+1) +1
+        def get_max_len(left, right):
+            while left >= 0 and right < n and s[left] == s[right]:  # 满足回文
+                left -= 1
+                right += 1
+            return right - left - 1  # 跳出时 左右相当于各自多走1步，要用 (right-1) - (left+1) +1 才表示真正位置
 
-    if len(s) < 1:
-        return ''
-    start, end = 0, 0  # idx 位置
-    for i in range(len(s)):
-        # 回文串 长度 奇数/偶数 两种情况
-        odd_len = expand_around_center(i, i)  # 奇数长度，左右起始 idx 相同; 执行 n 次
-        even_len = expand_around_center(i, i + 1)  # 偶数长度，左右起始 idx 相差1; 执行 n-1 次
-        max_len = max(odd_len, even_len)
-        # 更新 子串起止点
-        if max_len > end - start:
-            start = i - (max_len - 1) // 2  # 下限 idx, 同时考虑 max_len 奇偶情况
-            end = i + max_len // 2  # 上限 idx
+        max_len, max_i = 0, -1
+        for i in range(n):  # 'bb' 要让 idx 从 0 开始
+            odd_len = get_max_len(i, i)
+            even_len = get_max_len(i, i + 1)
+            len_i = max(odd_len, even_len)
+            if len_i > max_len:
+                max_len = len_i
+                max_i = i
 
-    return s[start:end + 1]
+        half, remain = max_len // 2, max_len % 2
+        if remain == 0:  # 偶数
+            return s[max_i - half + 1: max_i + half + 1]
+        else:
+            return s[max_i - half:max_i + half + 1]
 
+    def longestPalindrome_dp(self, s: str) -> str:
+        
 
-print(longest_palindrome('babad'))
-print(longest_palindrome('abacdfgdcaba'))
+s = Solution()
+print(s.longestPalindrome('bb'))
+print(s.longestPalindrome('babad'))
+print(s.longestPalindrome('abacdfgdcaba'))
