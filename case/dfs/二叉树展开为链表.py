@@ -9,11 +9,27 @@ class TreeNode:
 class Solution:
     def flatten(self, root: TreeNode) -> None:
         """
-        寻找前驱节点
-        空间复杂度 O(1)
+        寻找前驱节点 空间复杂度 O(1)
+
+        对于当前节点
+        - 如果左节点为空，不需操作
+        - 如果左节点不为空，那么左子树的最右节点(先序遍历最后1个) 作为右节点的前驱节点
+
+        更新过程中，不是一直维护着顺序；而是每到1个节点，先确保右找到前驱，找到链表部分关系，再继续遍历链表
         """
 
-        pass
+        cur = root
+        while cur:
+            # 如果存在左子树，需要为右节点寻找前驱
+            if cur.left:
+                pre = cur.left
+                while pre.right:  # 寻找最右
+                    pre = pre.right
+                pre.right = cur.right  # 左子树最右 -> cur.right
+                cur.right = cur.left  # 右节点 更新链表下一位置
+                cur.left = None  # 左节点置为 None
+
+            cur = cur.right  # 链表下一个
 
     def flatten_store(self, root: TreeNode) -> None:
         """
