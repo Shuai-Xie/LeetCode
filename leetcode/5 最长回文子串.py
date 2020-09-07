@@ -9,6 +9,7 @@
 
 class Solution:
     def longestPalindrome(self, s: str) -> str:
+        # 以 i 为中心，分奇偶两种情况 从中间向两边扩展
         n = len(s)
         if n <= 1:
             return s
@@ -35,9 +36,63 @@ class Solution:
             return s[max_i - half:max_i + half + 1]
 
     def longestPalindrome_dp(self, s: str) -> str:
-        
+        # 判断 i..j 是否为回文
+        # dp[i][j] = (s[i] == s[j]) and dp[i + 1][j - 1]
+        # dp 判断 回文串; 首尾字母相等 并且内部是回文
+        size = len(s)
+        if size < 2:
+            return s
 
-s = Solution()
-print(s.longestPalindrome('bb'))
-print(s.longestPalindrome('babad'))
-print(s.longestPalindrome('abacdfgdcaba'))
+        dp = [[False for _ in range(size)] for _ in range(size)]
+
+        max_len = 1
+        start = 0
+
+        # 对角线一定回文 初始化
+        for i in range(size):
+            dp[i][i] = True
+
+        # 始终 i<j
+        for j in range(1, size):  # 定右侧
+            for i in range(0, j):  # 寻左侧
+                if s[i] == s[j]:
+                    if j - i < 3:  # 长度<=3, 直接可通过 s[i],s[j] 判断
+                        dp[i][j] = True
+                    else:  # 状态转移，判断内部是不是
+                        dp[i][j] = dp[i + 1][j - 1]
+                else:
+                    dp[i][j] = False
+
+                if dp[i][j]:  # 判断 寻找最长回文
+                    cur_len = j - i + 1
+                    if cur_len > max_len:
+                        max_len = cur_len
+                        start = i
+
+        return s[start:start + max_len]
+
+    def longestPalindrome_bf(self, s: str) -> str:
+        def get_plen(s):
+            if s[::-1] == s:
+                return len(s)
+            else:
+                return -1
+
+        n = len(s)
+        plen = -1
+        pi = -1
+        for i in range(n - 1):  # 左边界
+            for j in range(i + 1, n):  # 右边界
+                sub_len = get_plen(s[i:j + 1])
+                if sub_len > plen:
+                    plen = sub_len
+                    pi = i
+
+        return s[pi:pi + plen]
+
+
+so = Solution()
+# s = 'bb'
+s = 'babad'
+print(so.longestPalindrome(s))
+print(so.longestPalindrome_bf(s))

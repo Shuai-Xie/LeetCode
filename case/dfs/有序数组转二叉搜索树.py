@@ -13,7 +13,7 @@ class Solution:
     # 有序数组 -> 高度平衡 BST, 左右子树差 <=1
     def sortedArrayToBST(self, nums: List[int]) -> TreeNode:
         if not nums:
-            return None
+            return
 
         mid = len(nums) // 2
         root = TreeNode(nums[mid])

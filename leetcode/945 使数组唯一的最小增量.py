@@ -7,27 +7,25 @@ from typing import List
 
 move 操作: 选择任意1个数，+1
 每次选中1个数，增加1，使得数组唯一
+
+问需要执行的 move 次数
 """
 
 
 class Solution:
+
     def minIncrementForUnique(self, A: List[int]) -> int:
         A.sort()
+
+        # 数组唯一，判断严格增序的值 是否满足不等
+        res = 0
         n = len(A)
-        f = [0] * n
-
-        if n == 0 or n == 1:
-            return 0
-
-        for i in range(1, n):
-            d = A[i] - A[i - 1]
-            if d <= 0:
-                f[i] = f[i - 1] + 1 - d  # 变成严格比之前大的
-                A[i] += 1 - d  # 直接更新掉这个值
-            else:
-                f[i] = f[i - 1]
-
-        return f[-1]
+        for i in range(n - 1):
+            d = A[i + 1] - A[i]
+            if d <= 0:  # 需要 move, 并更新 A[i+1]
+                res += (-d + 1)
+                A[i + 1] = A[i] + 1
+        return res
 
 
 s = Solution()
