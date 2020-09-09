@@ -165,19 +165,38 @@ def binaryTreePaths(root: TreeNode) -> List[List[int]]:
     return paths
 
 
+def preorderTraversal_iter(root: TreeNode) -> List[int]:
+    res = []
+    stack = []
+
+    while root or stack:
+        if root:
+            res.append(root.val)
+            # 添加 root.val
+            # 右孩子进栈，遍历左孩子
+            if root.right:
+                stack.append(root.right)  # 右孩子进; 出栈时是 离 root 最近的右孩子
+            root = root.left
+        else:
+            root = stack.pop()
+
+    return res
+
+
 if __name__ == '__main__':
-    # a = build_tree_from_arr([1, 2, 3, 4, 5, 6, 7])
-    a = build_tree_from_arr([1, 2, 3, 4])
-    print(binaryTreePaths(a))
-    print(binaryTreePaths_str(a))
+    a = build_tree_from_arr([1, 2, 3, 4, 5, 6, 7])
+    # a = build_tree_from_arr([1, 2, 3, 4])
+    # print(binaryTreePaths(a))
+    # print(binaryTreePaths_str(a))
 
     # layerTraverse(a)
     # print()
 
-    # preOrderTraverse(a)
-    # print()
-    # preOrderStack(a)
-    # print()
+    preOrderTraverse(a)
+    print()
+    preOrderStack(a)
+    print()
+    print(preorderTraversal_iter(a))
 
     # inOrderTraverse(a)
     # print()
