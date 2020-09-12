@@ -7,12 +7,12 @@ g[i] 为背包容积为 i 时总价值为最佳的方案数
 g[i] = 所有 f[j] = f[i] 的 方案数之和?
 """
 
-N, V = map(int, input().split())
-vs, ws = [0], [0]
-for _ in range(N):
-    v, w = map(int, input().split())
-    vs.append(v)
-    ws.append(w)
+# N, V = map(int, input().split())
+# vs, ws = [0], [0]
+# for _ in range(N):
+#     v, w = map(int, input().split())
+#     vs.append(v)
+#     ws.append(w)
 
 N, V = 4, 5
 vs = [0] + [1, 2, 3, 4]
