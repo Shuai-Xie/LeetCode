@@ -9,7 +9,7 @@ N, V = map(int, input().split())
 vs, ws = [0], [0]
 for _ in range(N):
     v, w, s = map(int, input().split())  # 将 s 个 v 二进制拆分为不同虚拟物品
-    if s == -1:  # 01
+    if s == -1:  # 01 背包
         vs.append(v)
         ws.append(w)
     else:
@@ -17,6 +17,7 @@ for _ in range(N):
             s = V // v
         else:  # 指定次
             s = min(V // v, s)  # 有效数量
+        # 转为二进制 01，可表示 [1,s] 范围内 任意合理数量
         k = 1
         while k <= s:
             vs.append(k * v)
@@ -29,7 +30,8 @@ for _ in range(N):
 
 # 转化为 二进制拆分后的 01 背包问题
 F = [0] * (V + 1)
-for i in range(1, len(vs)):
+N = len(vs)  # 更新物品总数
+for i in range(1, N):
     for j in range(V, vs[i] - 1, -1):  # 01 背包，只能装1个，所以是对的
         F[j] = max(F[j], F[j - vs[i]] + ws[i])
 print(F[-1])

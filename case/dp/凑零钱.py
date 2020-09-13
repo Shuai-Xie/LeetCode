@@ -5,71 +5,82 @@
 
 
 class Solution:
-    # 返回需要的 最少硬币 个数
-    # 每种硬币可用 无限次, 就是完全背包问题
-    # 但因为 求得不是最终 没用二分法
-    def coin_change(self, coins, amount):
+    def coin_change_dp(self, coins, amount):
+        """
+        :param coins: 可选的面值，无限个，完全背包
+        :param amount: 凑零钱总数
+
+        dp[i] 表示最少方案 使用的硬币数量
+        """
+        n = len(coins)
         dp = [0] + [amount + 1] * amount
-        coins = [0] + coins
-        # 遍历硬币面值
-        for i in range(1, len(coins)):
-            # 总面值
-            for j in range(coins[i], amount + 1):  # 完全背包
-                dp[j] = min(dp[j], dp[j - coins[i]] + 1)  # 内循环 j 变化时，外循环 i 没变，暗含了 coins[i] 可以选多次
-        return dp[-1]
+        # 面值=0，用0个;
+        # 其他面值 由于还未使用硬币，所以初始化 >amount 即可，因为最小面值为 1，不可能超过 amount
 
-    # 输出所有符合的方案，不要求 coin 个数最少
-    def coin_solutions(self, coins, amount):
-        coins = [0] + coins
-        dp = [[] for _ in range(amount + 1)]
-        # for c in coins:  # 单个 coin 的初始状态 不能赋值 这里要表示 i=0 即无商品的状态
-        #     dp[c] = [[c]]
-
-        # 方案从 面值=0 的方案 开始转移
-        for i in range(1, len(coins)):
-            for j in range(coins[i], amount + 1):  # 已经暗含 coins[i] 数量任意
-                dp[j] += [li + [coins[i]] for li in dp[j - coins[i]]]
-                if not dp[j - coins[i]] and coins[i] == j:  # 添加单个硬币的方案
-                    dp[j].append([coins[i]])
-
-        # for i in range(1, amount + 1):
-        #     print(i, dp[i])
+        for i in range(n):
+            for j in range(coins[i], amount + 1):
+                dp[j] = min(dp[j], dp[j - coins[i]] + 1)  # 随着 j 增加，coins[i] 使用数量也在累加
         return dp[-1]
 
     def coin_change_recur(self, coins, amount):
-        memo = {}  #
+        """
+        递归法，自上而下，并将子问题的解存入 memo
+        """
 
-        def dfs(n):
-            if n in memo:  # 保存中间结果
-                return memo[n]
-            if n == 0:
+        memo = {}  # 记录每个面值的 最少硬币数量
+
+        def dfs(amount):
+            if amount in memo:
+                return memo[amount]
+            if amount == 0:
                 return 0
-            if n < 0:  # 无解情况考虑
+            if amount < 0:  # 无解
                 return -1
 
-            res = amount + 1  # 不会超过这个数量
+            res = amount
             for c in coins:
-                sub = dfs(n - c)  # 子问题的数量
-                if sub == -1:  # 跳过无解情况
-                    continue
-                res = min(res, sub + 1)  # update
+                ans = dfs(amount - c)  # 无解情况 不要更新
+                if ans > -1:
+                    res = min(res, ans + 1)
+            memo[amount] = res
+            return res
 
-            memo[n] = res if res < amount + 1 else -1
-            return memo[n]
+        return dfs(amount)
 
-        dfs(amount)
-        return memo[amount]
+    def coin_change_solutions(self, coins, amount):
+        """
+        保存所有可行的方案
+        大方案 都是从 子方案 转移来的，在子方案基础上 添加新 coin 即可
+        dp[i] 表示 此面值下的 所有方案
+        """
+        n = len(coins)
+        dp = [[] for _ in range(amount + 1)]  # 每个 list 保存由 list 组成的方案
+
+        for i in range(n):
+            for j in range(coins[i], amount + 1):
+                dp[j] += [li + [coins[i]] for li in dp[j - coins[i]]]  # 注意是 +=
+                # 当 dp[j - coins[i]] 为空时，单个硬币组成的方案 无法通过 for 加入；补充
+                if not dp[j - coins[i]] and coins[i] == j:
+                    dp[j].append([coins[i]])
+        print('amount:', amount, 'solutions:', len(dp[-1]))
+        print(dp[-1])
+
+    def coin_change_solution_num(self, coins, amount):  # 方案总数
+        n = len(coins)
+        dp = [0] * (amount + 1)
+        dp[0] = 1
+
+        for i in range(n):
+            for j in range(coins[i], amount + 1):
+                # -coins[i] 后，所有子面值的方案数; 都可以作为 dp[j] 子方案
+                dp[j] += dp[j - coins[i]]  # 从面值 0 转移过来也是 方案
+
+        return dp[-1]
 
 
 if __name__ == '__main__':
-    k = 10
-    coins = [2, 3, 5]
-    amounts = [8, 13, 18]
+    W = 10
+    coins = list(range(1, W + 1))
 
     s = Solution()
-
-    for amount in amounts:
-        print(amount)
-        print(s.coin_change(coins, amount), s.coin_change_recur(coins, amount))
-        print(s.coin_solutions(coins, amount))
-        exit(0)
+    s.coin_change_solutions(coins, 4)
