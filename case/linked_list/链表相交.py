@@ -7,7 +7,7 @@ class ListNode:
 
 class Solution:
     def getIntersectionNode(self, headA: ListNode, headB: ListNode) -> ListNode:
-        # 相交链表，交点之后，尾部数据相同
+        # 相交链表，交点之后，尾部数据相同；寻找交点位置
         p, q = headA, headB
         # 等长 相交     正向遍历 即得到
         # 不等长 相交   第2次遍历 p=q, 其中1个位None时 另一个不会

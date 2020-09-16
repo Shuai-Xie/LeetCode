@@ -1,22 +1,21 @@
 """
-随机数生成 洗牌算法
-生成 1-n 范围内的随机数
+随机数生成 洗牌算法; 生成随机序列
 """
 import random
 
 
-def shuffle(x):
-    for i in range(len(x)):
-        # 从 x[:i+1] 中随机选1个 与 x[i] 交换
-        # 保证每次 随机取到的数 都与当前的数不同. O(n)
-        # 传统做法：每次随机取一个，都从数组中删除这个数，但是删除操作也是O(n)，最终为 O(n^2)
-        idx = int(random.random() * i) + 1
-        x[idx], x[i] = x[i], x[idx]
+def shuffle(arr):
+    n = len(arr)
+
+    for i in range(1, n):
+        rand_idx = int(random.random() * i)  # [0, i-1]
+        arr[rand_idx], arr[i] = arr[i], arr[rand_idx]  # 将 i 与之前 某个位置的数 交换
 
 
 n = 10
 x = list(range(1, n + 1))
-print(x)
+
+random.seed(10)
 for _ in range(5):
     shuffle(x)  # list 传入引用
     print(x)

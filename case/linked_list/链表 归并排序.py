@@ -11,6 +11,7 @@ class Solution:
             if not h or not h.next:
                 return h
 
+            # fast = 2*slow, fast 到达末尾时，slow 恰好在中间
             slow, fast = h, h.next
             while fast and fast.next:  # 跳出位置, 偶数 fast.next 为空，奇数 fast.next.next 为空
                 fast = fast.next.next
@@ -26,7 +27,7 @@ class Solution:
                 else:
                     p.next = l2
                     l2 = l2.next
-                p = p.next
+                p = p.next  # p 总是要向后遍历
             if l1:
                 p.next = l1
             if l2:
@@ -38,6 +39,7 @@ class Solution:
 
         # 中点切割左右链
         mid = get_mid(head)  # 快慢指针
+
         right, mid.next = mid.next, None  # 右链, 左链 head 出发，末尾置为 None
         return merge_two_lists(self.mergeSort(head), self.mergeSort(right))
 

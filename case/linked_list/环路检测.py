@@ -10,6 +10,7 @@ class ListNode:
 
 
 class Solution:
+    # 返回环路的入口结点
     def detectCycle(self, head: ListNode) -> ListNode:
         if not head or not head.next:
             return None
@@ -25,6 +26,9 @@ class Solution:
         if fast != slow:
             return None
         else:
+            # x = (n-1) * C + (C - p)
+            # 左: fast 从 head 走;
+            # 右: slow 从其原来位置出发，走过 C-p 和 n-1 个 C 后 与 x 相遇
             fast = head
             while fast != slow:
                 fast = fast.next

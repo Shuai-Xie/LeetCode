@@ -35,123 +35,104 @@ def shell_sort(a):
     print(a)
 
 
-## 选择排序
-
-# 简单选择排序
-def select_sort(a):
-    LEN = len(a)
-    for i in range(LEN):
-        for j in range(i + 1, LEN):
-            if a[i] > a[j]:  # swap(i,j)
-                a[i], a[j] = a[j], a[i]  # 最小元素放前
-    return a
-
-
-# 堆排序
-# 利用完全二叉树，父子节点 idx 位置关系，构建大根堆
-# 并不断将最大值替换到数组末尾
-def heap_sort(a):
-    LEN = len(a)
-    if LEN == 1:
-        return a
-    else:
-        # 自下而上 建立大根堆；从最后1个父亲 idx = (LEN-1 -1)//2 开始直到 root
-        for i in range((LEN - 2) // 2, -1, -1):  # 反过来就是堆中idx最大的左孩子位置
-            child = 2 * i + 1  # 左孩子; idx 不是从1开始的
-            if child + 1 < LEN:  # 判断是否有 右孩子
-                child = child + 1 if a[child + 1] > a[child] else child  # 指向最大孩子
-            if a[child] > a[i]:  # 交换 父子
-                a[i], a[child] = a[child], a[i]
-        # 建完大根堆后，更换首尾
-        a[0], a[LEN - 1] = a[LEN - 1], a[0]
-        # 递归构建剩下的元素，成为大根堆
-        a[:-1] = heap_sort(a[:-1])  # 排序结果更新原来 list
-        return a
+# 选择排序
+def select_sort(arr):
+    # 从小到大，往后面找 存在更小的就交换
+    n = len(arr)
+    for i in range(n - 1):  # 保证每个位置 i 的元素都是 最小的
+        for j in range(i + 1, n):
+            if arr[j] < arr[i]:
+                arr[i], arr[j] = arr[j], arr[i]
+    return arr
 
 
-## 交换排序
-
-# 冒泡排序，最大值放后
-def bubble_sort(a):
-    LEN = len(a)
-    for i in range(1, LEN):
-        for j in range(LEN - i):  # 上限 LEN-2
-            if a[j] > a[j + 1]:
-                a[j], a[j + 1] = a[j + 1], a[j]
-    return a
+# 冒泡排序
+def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n - 1):
+        for j in range(n - i - 1):  # i=0, j+1
+            if arr[j] > arr[j + 1]:  # 比较两个连续的值；将最大值不断确定
+                arr[j], arr[j + 1] = arr[j + 1], arr[j]
+    return arr
 
 
-# 快速排序，递归
-# 自上而下 根据 pivot 分割 sub_list
-# 所以 quick_sort 分割左右在后，而 merge_sort 在前
-def quick_sort(a):
-    a = a[:]  # 不改变原序列
-    if len(a) <= 1:  # 也要处理空 list，比如下面 low=0
-        return a
-    low, high = 0, len(a) - 1
-    pivot = a[low]  # 基准值
-    while low < high:
-        # 两边往中间查找
-        while low < high and a[high] >= pivot:  # 不用担心条件1先不满足，因为 low=high，赋值无影响
-            high -= 1
-        a[low], a[high] = a[high], a[low]  # 把 < pivot 的值 a[high] 放左边，此时 a[low] = pivot
-        while low < high and a[low] <= pivot:
-            low += 1
-        a[low], a[high] = a[high], a[low]  # 把 > pivot 的值 a[low] 放右边，此时 a[high] = pivot
-    # low 为 pivot 实际位置
-    # 再分别排序左右
-    a[:low] = quick_sort(a[:low])  # 截取相当于 重新初始化了?
-    a[low + 1:] = quick_sort(a[low + 1:])
-    return a
+# 快排
+def quick_sort(arr):
+    n = len(arr)
+    if n <= 1:
+        return arr
+
+    left, right = 0, n - 1
+    pivot = arr[left]  # 枢轴
+
+    while left < right:
+        while left < right and arr[right] >= pivot:
+            right -= 1
+        arr[left], arr[right] = arr[right], arr[left]  # 枢轴交换到右侧 idx=right
+        while left < right and arr[left] <= pivot:
+            left += 1
+        arr[left], arr[right] = arr[right], arr[left]
+
+    # 枢轴位置 left
+    arr[:left] = quick_sort(arr[:left])
+    arr[left + 1:] = quick_sort(arr[left + 1:])  # 枢轴位置已确定，所以从 left+1 开始
+
+    return arr
 
 
 # 归并排序
-# 自下而上 归并 sub_list 为有序
-def merge_sort(a):
-    if len(a) < 2:
-        return a
-    else:
-        mid = len(a) // 2  # 平分两段，要避免最下端 array 只有 2个元素时，始终分不开为2个长度为1的list的问题
-        # 递归将 merge 两段 都排成有序，再 归并
-        a[:mid] = merge_sort(a[:mid])
-        a[mid:] = merge_sort(a[mid:])
-        b = []
-        i, j = 0, mid
-        while i < mid and j < len(a):
-            if a[i] < a[j]:
-                b.append(a[i])
-                i += 1
-            else:
-                b.append(a[j])
-                j += 1
-        b = b + a[i:mid] + a[j:]
-        return b
-
-
-def merge_sort2(arr):
+def merge_sort(arr):
     n = len(arr)
-    if n < 2:
+    if n <= 1:
         return arr
-    else:
-        mid = n // 2  # 均分两段
-        a = merge_sort2(arr[:mid])  # 不断分解到最短 len(a) = 0 or 1
-        b = merge_sort2(arr[mid:])
-        # 此时 a,b 两段已有序
-        c = []
-        while a and b:
-            if a[0] < b[0]:
-                c.append(a.pop(0))
-            else:
-                c.append(b.pop(0))
-        c = c + a + b  # 其中1个必为空 []
-        return c
+
+    # 左右排序
+    mid = n // 2
+    left = merge_sort(arr[:mid])
+    right = merge_sort(arr[mid:])
+
+    # 归并
+    res = []
+    i, j = 0, 0
+    while i < mid and j < n - mid:
+        if left[i] < right[j]:
+            res.append(left[i])
+            i += 1
+        else:
+            res.append(right[j])
+            j += 1
+    return res + left[i:] + right[j:]
+
+    # pop 简洁，但存取多
+    # while left and right:
+    #     if left[0] < right[0]:
+    #         res.append(left.pop(0))
+    #     else:
+    #         res.append(right.pop(0))
+    # return res + left + right
+
+
+# 堆排序
+# 从前向后截取，不断构建小顶堆
+def heap_sort(arr):
+    n = len(arr)
+    if n <= 1:
+        return arr
+
+    # 利用完全二叉树，父节点 与 子节点 idx 关系；自下而上构建 小顶堆; 保证孩子比父节点大
+    for i in range(n // 2, -1, -1):
+        if 2 * i + 1 < n and arr[2 * i + 1] < arr[i]:  # 左
+            arr[2 * i + 1], arr[i] = arr[i], arr[2 * i + 1]
+        if 2 * i + 2 < n and arr[2 * i + 2] < arr[i]:  # 右
+            arr[2 * i + 2], arr[i] = arr[i], arr[2 * i + 2]
+    arr[1:] = heap_sort(arr[1:])
+    return arr
 
 
 if __name__ == '__main__':
-    a = list(np.random.permutation(12))
+    a = list(np.random.permutation(30))
     print(a)
-    print(quick_sort(a))
-    print(a)
-    print(merge_sort2(a))
-    print(a)
-    print(merge_sort(a))
+    # print(quick_sort(a[:]))
+    # print(bubble_sort(a[:]))
+    # print(merge_sort(a[:]))
+    print(heap_sort(a[:]))

@@ -71,8 +71,9 @@ class Solution:
             if not root:
                 return
             inorder(root.left)
-            # 访问到当前 node, 其 left 子树已经全部加到 p 链表中，可置为 None
-            root.left = None
+
+            # 访问到当前 node
+            root.left = None  # 其 left 子树已在递归时，全部加到 p 链表中，可置为 None
             p.right = root
             p = p.right
 

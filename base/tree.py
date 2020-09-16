@@ -13,9 +13,24 @@ class TreeNode:
 
 # 先序：根节点->左子树->右子树
 # 1 2 4 5 3 6 7
+def preOrderTraverse_return(node):
+    res = []
+
+    def dfs(node):
+        if node:
+            res.append(node.val)
+            dfs(node.left)
+            dfs(node.right)
+
+    dfs(node)
+    return res
+
+
+# 先序：根节点->左子树->右子树
+# 1 2 4 5 3 6 7
 def preOrderTraverse(node):
     if not node:
-        return None
+        return
     print(node.val, end=' ')
     preOrderTraverse(node.left)
     preOrderTraverse(node.right)
@@ -25,7 +40,7 @@ def preOrderTraverse(node):
 # 4 2 5 1 6 3 7 每个树节点都投影到地平线
 def inOrderTraverse(node):
     if node is None:
-        return None
+        return
     inOrderTraverse(node.left)
     print(node.val, end=' ')
     inOrderTraverse(node.right)
@@ -35,78 +50,60 @@ def inOrderTraverse(node):
 # 4 5 2 6 7 3 1 先左右，再出根
 def postOrderTraverse(node):
     if node is None:
-        return None
+        return
     postOrderTraverse(node.left)
     postOrderTraverse(node.right)
     print(node.val, end=' ')
 
 
-# 非递归
-# 用栈模拟 递归的过程
-# 根-左-右
 def preOrderStack(node):
-    if not node:
-        return None
-
-    stack = [node]  # 节点入栈
+    res = []
+    stack = [node]
     while stack:
-        node = stack.pop()  # 栈尾元素, -1
+        node = stack.pop()  # -1
         if node:
-            print(node.val, end=' ')
-            stack.append(node.right)  # 先添加右孩子
-            stack.append(node.left)  # 让左孩子先出栈
-            # 先出栈的放在栈顶
+            res.append(node.val)
+            stack.append(node.right)
+            stack.append(node.left)  # 放后 先出栈
+    return res
 
 
-def inOrderStack(node):
-    if not node:
-        return None
-
+def inorderStack(node):
+    res = []
     stack = []
-    while node or stack:  # node 对应 if, stack 对应 else
-        if node:  # 首节点, 方便根据 node 压入节点
-            stack.append(node)
-            node = node.left  # 将左节点不断压栈
-        else:  # 当左节点为空时，出栈当前节点，并进入右节点
-            node = stack.pop()
-            print(node.val, end=' ')
-            node = node.right
+    while node or stack:
+        if node:
+            stack.append(node)  # 左节点入栈
+            node = node.left
+        else:
+            node = stack.pop()  # 为空弹出，遍历右节点
+            res.append(node.val)
+            node = node.right  # 判断右路
 
 
 def postOrderStack(node):
-    if not node:
-        return None
-
+    res = []
     stack = [node]
-    stack2 = []
-
     while stack:
         node = stack.pop()
         if node:
-            stack2.append(node.val)  # 存储 stack 的依次出栈
-            stack.append(node.left)  # stack 先压 left 再 right，出栈时对于 stack2，先压 right 再 left；那么 stack2 出栈 就是 left-right-root
+            res.append(node.val)
+            stack.append(node.left)
             stack.append(node.right)
-            # 与 preOrderStack 对比
-            # 在 pre 中，node.val 直接 print
-            # 而 post 使用 stack2 将 root 压入栈底
 
-    while stack2:  # 出栈顺序
-        print(stack2.pop(), end=' ')
+    return res[::-1]
 
 
-# 层序遍历
 def layerTraverse(node):
-    if node is None:
-        return None
-
-    queue = [node]
-
-    while queue:
-        node = queue.pop(0)  # 出来 queue 首元素
+    res = []
+    quene = [node]
+    while quene:
+        node = quene.pop(0)
         if node:
-            print(node.val, end=' ')
-            queue.append(node.left)
-            queue.append(node.right)
+            res.append(node.val)
+            quene.append(node.left)  # 先进先出
+            quene.append(node.right)
+    return res
 
 
 def build_tree_from_arr(arr):
@@ -165,38 +162,15 @@ def binaryTreePaths(root: TreeNode) -> List[List[int]]:
     return paths
 
 
-def preorderTraversal_iter(root: TreeNode) -> List[int]:
-    res = []
-    stack = []
-
-    while root or stack:
-        if root:
-            res.append(root.val)
-            # 添加 root.val
-            # 右孩子进栈，遍历左孩子
-            if root.right:
-                stack.append(root.right)  # 右孩子进; 出栈时是 离 root 最近的右孩子
-            root = root.left
-        else:
-            root = stack.pop()
-
-    return res
-
-
 if __name__ == '__main__':
     a = build_tree_from_arr([1, 2, 3, 4, 5, 6, 7])
     # a = build_tree_from_arr([1, 2, 3, 4])
     # print(binaryTreePaths(a))
     # print(binaryTreePaths_str(a))
 
-    # layerTraverse(a)
-    # print()
-
-    preOrderTraverse(a)
-    print()
-    preOrderStack(a)
-    print()
-    print(preorderTraversal_iter(a))
+    print(layerTraverse(a))
+    print(preOrderTraverse(a))
+    print(preOrderStack(a))
 
     # inOrderTraverse(a)
     # print()
