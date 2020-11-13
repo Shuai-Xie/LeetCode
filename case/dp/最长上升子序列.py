@@ -15,7 +15,7 @@ class Solution:
         for i in range(n - 1, -1, -1):  # 倒着索引
             if dp[i] == cur_len:
                 ans.append(nums[i])
-                cur_len -= 1
+                cur_len -= 1  # 当前子序列长度
                 if cur_len == 0:
                     break
         return ans[::-1]
@@ -32,20 +32,16 @@ class Solution:
         n = len(nums)
         if n == 0:
             return 0
+        dp = [1] * n  # 初始状态，每个 val 单个组成子序列
 
-        dp = [1] * n  # 初始化，n=1 的情况刚好包含在内
-
-        for i in range(1, n):
-            for j in range(i):  # i 之前的某个字符
-                if nums[i] > nums[j]:  # 更新情况
-                    dp[i] = max(dp[i], dp[j] + 1)  # j 位置最长 +1
-
-        print(self.get_one_LIS(dp))
-
-        return max(dp)
+        for i in range(1, n):  # i 作为子序列末尾最大元素; 从左到右增加; 0..i-1 子问题已解决
+            for j in range(i):
+                if nums[j] < nums[i]:
+                    dp[i] = max(dp[i], dp[j] + 1)
+        return max(dp)  # 注意返回最大值，因为可能不是以最后一个值取到的
 
 
 s = Solution()
-# nums = [10, 9, 2, 5, 3, 7, 101, 18]
-nums = [1, 3, 6, 7, 9, 4, 10, 5, 6]
+nums = [10, 9, 2, 5, 3, 7, 101, 18]
+# nums = [1, 3, 6, 7, 9, 4, 10, 5, 6]
 print(s.lengthOfLIS(nums))

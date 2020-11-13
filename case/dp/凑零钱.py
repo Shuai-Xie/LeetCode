@@ -18,8 +18,8 @@ class Solution:
         # 其他面值 由于还未使用硬币，所以初始化 >amount 即可，因为最小面值为 1，不可能超过 amount
 
         for i in range(n):
-            for j in range(coins[i], amount + 1):
-                dp[j] = min(dp[j], dp[j - coins[i]] + 1)  # 随着 j 增加，coins[i] 使用数量也在累加
+            for j in range(coins[i], amount + 1):  # 完全背包，随着 j 增加，coins[i] 使用数量也在累加
+                dp[j] = min(dp[j], dp[j - coins[i]] + 1)
         return dp[-1]
 
     def coin_change_recur(self, coins, amount):
@@ -37,11 +37,13 @@ class Solution:
             if amount < 0:  # 无解
                 return -1
 
-            res = amount
+            res = amount + 1
             for c in coins:
                 ans = dfs(amount - c)  # 无解情况 不要更新
                 if ans > -1:
                     res = min(res, ans + 1)
+            if res == amount + 1:
+                res = -1
             memo[amount] = res
             return res
 
@@ -78,9 +80,9 @@ class Solution:
         return dp[-1]
 
 
-if __name__ == '__main__':
-    W = 10
-    coins = list(range(1, W + 1))
+W = 10
+coins = list(range(1, W + 1))
+amount = 4
 
-    s = Solution()
-    s.coin_change_solutions(coins, 4)
+s = Solution()
+s.coin_change_solutions(coins, amount)

@@ -37,6 +37,6 @@ class Solution:
 
 
 s = Solution()
-a = s.permute([1, 2, 5, 5])
+a = s.permute([1, 2, 5])
 print(len(a))
 print(a)

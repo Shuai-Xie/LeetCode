@@ -31,15 +31,8 @@ class Solution:
         if max(A) == min(A):
             return 1
 
-        n = len(A)
-        dp = [1] * n  # dp[i] 表示以 i 作为倒数第2个元素的 最长湍流数组长度，所以要 +1
 
-        for i in range(1, n - 1):  # 至少为2
-            # if cmp(A[i - 1], A[i]) * cmp(A[i], A[i + 1]) == -1:
-            if A[i - 1] < A[i] > A[i + 1] or A[i - 1] > A[i] < A[i + 1]:
-                dp[i] = dp[i - 1] + 1  # 注意 这里 +1 只到 i，并算入 i+1，所以最后 ans+1
 
-        return max(dp) + 1  # 对于全=1的，只要不是元素全部相等，至少为2; 不相等的二值一定满足 符号 > or <
 
     def maxTurbulenceSize_old(self, A: List[int]) -> int:
         """

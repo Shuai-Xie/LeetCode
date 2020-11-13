@@ -1,35 +1,38 @@
+"""
+https://leetcode-cn.com/problems/ones-and-zeroes/
+m 个 0, n 个 1; 能拼成数组中 字符串的 最大数量
+"""
+
 from typing import List
 
 
 class Solution:
-    def cnt_01(self, s):
-        cnt = {'0': 0, '1': 0}
-        for c in s:
-            cnt[c] += 1
-        return cnt
-
     def findMaxForm(self, strs: List[str], m: int, n: int) -> int:
-        """
-        每个 0/1 只能用1次，二维的01背包，问最多可拼成的 str 个数
-        :param strs: 字符串数组，代表每个物品
-        :param m: 0 个数
-        :param n: 1 个数
-        """
-        dp = [[0] * (n + 1) for _ in range(m + 1)]  # 行 0 个数，列 1 个数
+        # strs 中的 s 同时消耗 0/1 两种商品; 0/1 背包; 选择 s 是否放入
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+
+        def cnt01(s):
+            cnt = {'0': 0, '1': 0}
+            for c in s:
+                cnt[c] += 1
+            return cnt['0'], cnt['1']
+
         for s in strs:
-            cnt = self.cnt_01(s)
-            # dp 填表过程
-            for i in range(m, cnt['0'] - 1, -1):
-                for j in range(n, cnt['1'] - 1, -1):
-                    dp[i][j] = max(
-                        dp[i][j],  # 不装 s
-                        dp[i - cnt['0']][j - cnt['1']] + 1  # 装 s
-                    )
+            cnt0, cnt1 = cnt01(s)  # m,n
+            for i in range(m, cnt0 - 1, -1):
+                for j in range(n, cnt1 - 1, -1):  # 大到小更新，小的恰好是不包含当前 s 时，能得到的最优状态
+                    dp[i][j] = max(dp[i][j], dp[i - cnt0][j - cnt1] + 1)
+
         return dp[-1][-1]
 
 
-s = Solution()
 strs = ["10", "0001", "111001", "1", "0"]
-print(s.findMaxForm(strs, 5, 3))
+m = 5
+n = 3
+
 strs = ["10", "0", "1"]
-print(s.findMaxForm(strs, 1, 1))
+m = 1
+n = 1
+
+s = Solution()
+print(s.findMaxForm(strs, m, n))
